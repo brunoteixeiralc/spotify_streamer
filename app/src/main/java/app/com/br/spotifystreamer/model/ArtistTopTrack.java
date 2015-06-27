@@ -2,9 +2,10 @@ package app.com.br.spotifystreamer.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ArtistTopTrack {
+public class ArtistTopTrack implements Serializable{
 
     @SerializedName("name")
     private String trackName;
@@ -14,6 +15,9 @@ public class ArtistTopTrack {
 
     @SerializedName("preview_url")
     private String previewUrl;
+
+    @SerializedName("duration_ms")
+    private Double duration;
 
 
     public String getTrackName() {
@@ -39,4 +43,13 @@ public class ArtistTopTrack {
     public void setAlbum(Album album) {
         this.album = album;
     }
+
+    public Double getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Double duration) {
+        this.duration = duration;
+    }
+
 }

@@ -5,6 +5,6 @@
     <string name="search">Search your artist</string>
     <string name="not_find">Sorry, we didn\'t find your artist! :(</string>
 
-    <bool name="isTablet">false</bool>
+    <bool name="isTablet">true</bool>
 
 </resources>

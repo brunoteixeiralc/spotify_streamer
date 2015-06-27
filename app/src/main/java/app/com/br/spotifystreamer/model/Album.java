@@ -2,12 +2,13 @@ package app.com.br.spotifystreamer.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by brunolemgruber on 05/06/15.
  */
-public class Album {
+public class Album implements Serializable {
 
     @SerializedName("name")
     private String name;

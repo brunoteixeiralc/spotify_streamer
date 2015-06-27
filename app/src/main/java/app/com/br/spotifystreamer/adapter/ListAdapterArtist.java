@@ -16,18 +16,19 @@ import app.com.br.spotifystreamer.ws.RestClient;
 /**
  * Created by brunolemgruber on 13/02/15.
  */
-public class ListaAdapterArtist extends BaseAdapter{
+public class ListAdapterArtist extends BaseAdapter{
 
 
     private List<Artist> artists;
     private static LayoutInflater inflater = null;
     private Context context;
-    private RestClient restClient;
+    private boolean tabletSize;
 
-    public ListaAdapterArtist(Context context, List<Artist> artists) {
+    public ListAdapterArtist(Context context, List<Artist> artists, boolean tabletSize) {
         this.artists = artists;
         inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.context = context;
+        this.tabletSize = tabletSize;
     }
 
     static class ViewHolder{
@@ -73,9 +74,12 @@ public class ListaAdapterArtist extends BaseAdapter{
         }
 
         holder.artistName.setText(artists.get(position).getArtistName());
-        if(artists.get(position).getArtistAlbumImage().size() > 0)
-            Picasso.with(context).load(artists.get(position).getArtistAlbumImage().get(artists.get(position).getArtistAlbumImage().size() - 2).getUrlImage()).into(holder.artistAlbumImage);
-
+        if(artists.get(position).getArtistAlbumImage().size() > 0) {
+            if(tabletSize)
+                Picasso.with(context).load(artists.get(position).getArtistAlbumImage().get(artists.get(position).getArtistAlbumImage().size() - 2).getUrlImage()).resize(80, 80).into(holder.artistAlbumImage);
+            else
+                Picasso.with(context).load(artists.get(position).getArtistAlbumImage().get(artists.get(position).getArtistAlbumImage().size() - 2).getUrlImage()).resize(200, 200).into(holder.artistAlbumImage);
+        }
         return convertView;
 
     }

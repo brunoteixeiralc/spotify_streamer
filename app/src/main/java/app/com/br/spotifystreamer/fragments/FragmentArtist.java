@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -21,17 +20,12 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
-
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
 import app.com.br.spotifystreamer.ActivityTopTrack;
-import app.com.br.spotifystreamer.MainActivity;
 import app.com.br.spotifystreamer.R;
-import app.com.br.spotifystreamer.adapter.ListaAdapterArtist;
+import app.com.br.spotifystreamer.adapter.ListAdapterArtist;
 import app.com.br.spotifystreamer.model.Artist;
 import app.com.br.spotifystreamer.ws.RestClient;
 import retrofit.Callback;
@@ -46,7 +40,7 @@ public class FragmentArtist extends Fragment {
     private View view;
     private ListView artistList;
     private RestClient restClient;
-    private ListaAdapterArtist listaAdapter;
+    private ListAdapterArtist listaAdapter;
     private List<Artist> artists;
     private Gson gson;
     private LinkedTreeMap<String,Object> artistMap;
@@ -54,11 +48,16 @@ public class FragmentArtist extends Fragment {
     private EditText search;
     private TextView noResult;
     private Intent intent;
+    private Fragment fragment;
+    private FragmentTransaction ft;
+    private boolean tabletSize;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.list, container, false);
+
+        tabletSize = getResources().getBoolean(R.bool.isTablet);
 
         setRetainInstance(true);
 
@@ -84,16 +83,31 @@ public class FragmentArtist extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
 
-                intent = new Intent(FragmentArtist.this.getActivity(), ActivityTopTrack.class);
-                intent.putExtra("artist_id",((Artist)parent.getAdapter().getItem(position)).getArtistId());
-                intent.putExtra("artist_name",((Artist)parent.getAdapter().getItem(position)).getArtistName());
-                startActivity(intent);
-            }
+                if(tabletSize){
 
+                    fragment = new FragmentTopTrack();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("artistId", ((Artist) parent.getAdapter().getItem(position)).getArtistId());
+                    bundle.putString("artistName", ((Artist) parent.getAdapter().getItem(position)).getArtistName());
+                    fragment.setArguments(bundle);
+                    ft = FragmentArtist.this.getActivity().getSupportFragmentManager().beginTransaction();
+                    ft.replace(R.id.container, fragment);
+                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                    ft.commit();
+
+                }else{
+
+                    intent = new Intent(FragmentArtist.this.getActivity(), ActivityTopTrack.class);
+                    intent.putExtra("artistId",((Artist)parent.getAdapter().getItem(position)).getArtistId());
+                    intent.putExtra("artistName",((Artist)parent.getAdapter().getItem(position)).getArtistName());
+                    startActivity(intent);
+                }
+
+            }
         });
 
         if(artists != null){
-            listaAdapter = new ListaAdapterArtist(FragmentArtist.this.getActivity(), artists);
+            listaAdapter = new ListAdapterArtist(FragmentArtist.this.getActivity(), artists,tabletSize);
             artistList.setAdapter(listaAdapter);
         }else{
             artists = new ArrayList<Artist>();
@@ -127,7 +141,7 @@ public class FragmentArtist extends Fragment {
                         artists = gson.fromJson(itemsJson, new TypeToken<List<Artist>>() {
                         }.getType());
 
-                        listaAdapter = new ListaAdapterArtist(FragmentArtist.this.getActivity(), artists);
+                        listaAdapter = new ListAdapterArtist(FragmentArtist.this.getActivity(), artists,tabletSize);
                         artistList.setAdapter(listaAdapter);
 
                     } else {

@@ -2,6 +2,7 @@ package app.com.br.spotifystreamer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
@@ -28,15 +29,19 @@ public class ActivityTopTrack extends ActionBarActivity {
 
             intent = getIntent();
             bundle = new Bundle();
-            bundle.putString("artist_id",intent.getExtras().getString("artist_id"));
-            bundle.putString("artist_name",intent.getExtras().getString("artist_name"));
+            bundle.putString("artistId", intent.getExtras().getString("artistId"));
+            bundle.putString("artistName", intent.getExtras().getString("artistName"));
             fragment.setArguments(bundle);
 
             ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.container, fragment);
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             ft.commit();
+
+            }
+
         }
+
     }
 
-}
+

@@ -22,7 +22,6 @@
             android:id="@+id/trackName"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Paradise"
             android:gravity="left"
             android:textSize="14dp"/>
 
@@ -30,7 +29,6 @@
             android:id="@+id/albumName"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Mylo Xyolo"
             android:gravity="left"
             android:textSize="12dp"/>
 

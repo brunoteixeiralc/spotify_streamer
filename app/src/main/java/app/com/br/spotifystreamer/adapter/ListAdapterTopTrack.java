@@ -16,18 +16,19 @@ import app.com.br.spotifystreamer.ws.RestClient;
 /**
  * Created by brunolemgruber on 13/02/15.
  */
-public class ListaAdapterTopTrack extends BaseAdapter{
+public class ListAdapterTopTrack extends BaseAdapter{
 
 
     private List<ArtistTopTrack> artistTopTracks;
     private static LayoutInflater inflater = null;
     private Context context;
-    private RestClient restClient;
+    private boolean tabletSize;
 
-    public ListaAdapterTopTrack(Context context, List<ArtistTopTrack> artistTopTracks) {
+    public ListAdapterTopTrack(Context context, List<ArtistTopTrack> artistTopTracks, boolean tabletSize) {
         this.artistTopTracks = artistTopTracks;
         inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.context = context;
+        this.tabletSize = tabletSize;
     }
 
     static class ViewHolder{
@@ -77,7 +78,10 @@ public class ListaAdapterTopTrack extends BaseAdapter{
         holder.albumName.setText(artistTopTracks.get(position).getAlbum().getName());
         holder.trackName.setText(artistTopTracks.get(position).getTrackName());
         if(artistTopTracks.get(position).getAlbum().getImages().size() > 0)
-            Picasso.with(context).load(artistTopTracks.get(position).getAlbum().getImages().get(artistTopTracks.get(position).getAlbum().getImages().size() - 2).getUrlImage()).into(holder.albumImage);
+            if(tabletSize)
+                Picasso.with(context).load(artistTopTracks.get(position).getAlbum().getImages().get(artistTopTracks.get(position).getAlbum().getImages().size() - 2).getUrlImage()).resize(80, 80).into(holder.albumImage);
+            else
+                Picasso.with(context).load(artistTopTracks.get(position).getAlbum().getImages().get(artistTopTracks.get(position).getAlbum().getImages().size() - 2).getUrlImage()).resize(200, 200).into(holder.albumImage);
 
         return convertView;
 

@@ -8,9 +8,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import app.com.br.spotifystreamer.fragments.FragmentArtist;
+import app.com.br.spotifystreamer.fragments.FragmentTopTrack;
 
 
-public class MainActivity extends ActionBarActivity {
+public class ActivityArtist extends ActionBarActivity {
 
     private Fragment fragment;
     private FragmentTransaction ft;
@@ -20,13 +21,19 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fragment = new FragmentArtist();
+        final boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
 
         if(savedInstanceState == null) {
-            ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.container, fragment);
-            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            ft.commit();
+
+            if(!tabletSize) {
+
+                fragment = new FragmentArtist();
+
+                ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.container, fragment);
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                ft.commit();
+            }
         }
     }
 
